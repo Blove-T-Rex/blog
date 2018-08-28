@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title></title>
+    <style>
+      .list{
+        margin: 50px;
+        padding: 0;
+      }
+    </style>
+    <link rel="stylesheet" href="/bootstrap/css/bootstrap.css">
+       <script type="text/javascript" src="/bootstrap/js/jquery-1.11.0.js"></script>
+       <script type="text/javascript" src="/bootstrap/js/bootstrap.js"></script>
+  </head>
+  <body>
+
+      <%- include("myheader.ejs",{title:"用户版博客",isShow:true,isSearch:false})%>
+              
+      
+      <div class="list">
+        
+      </div>
+      
+      <nav aria-label="Page navigation" style="text-align: center">
+        <ul class="pagination pagination-lg"">
+          <li>
+            <a href="#" aria-label="Previous">
+              <span aria-hidden="true">&laquo;</span>
+            </a>
+          </li>
+         <!--  <li class="num"><a href="#">1</a></li>
+          <li class="num"><a href="#">2</a></li>
+          <li class="num"><a href="#">3</a></li>
+          <li class="num"><a href="#">4</a></li>
+          <li class="num"><a href="#">5</a></li>
+          <li class="num"><a href="#">6</a></li>
+          <li>
+            <a href="#" aria-label="Next">
+              <span aria-hidden="true">&raquo;</span>
+            </a>
+          </li> -->
+        </ul>
+      </nav>
+
+      <script type="text/javascript">
+         // 后台页数获取
+        getList(0);
+        var limit = 5;
+        $.ajax({
+          url:"/list/count",
+          data:{},
+          dataType:"json",
+
+          success:function(info){
+
+            page(info);
+
+          }
+        })
+
+        //后台列表数据获取
+        function getList(current){
+          $.ajax({
+            url:"/list",
+            data:{
+              limit:5, // 一页几条数据
+              offset:current*5 // 第几页
+            },
+
+            dataType:'json',
+
+            success:function(result){
+              console.log(result);
+
+              render(result);
+            } 
+          })
+        }
+         
+         function render(result){
+            for(var i=0;i<result.length;i++){
+              var $div = `<div class="media">
+                <div class="media-left media-middle">
+                  <a href="/detail/${result[i]._id}">
+                    <img class="media-object" style="width:64px;height:64px" src="${result[i].filepath}">
+                  </a>
+                </div>
+                <div class="media-body">
+                  <h4 class="media-heading">${result[i].title}</h4>
+                  ${result[i].content}
+                </div>
+              </div>`
+
+              $(".list").append($div);
+            }
+         }
+
+         function page(info){
+          var totalpages = info.length/limit;
+          var $footpage = `
+            <li>
+            <a href="#" aria-label="Next">
+              <span aria-hidden="true">&raquo;</span>
+            </a>
+          </li>`;
+          for(var i=0; i<totalpages; i++){
+            var $li = `
+               <li class="page"><a href="#">${i+1}</a></li>`;
+            $(".pagination").append($li);
+          }
+          $(".pagination").on('click', '.page', function() {
+            var current = $(this).text()-1;
+            $(".list").empty();
+            getList(current);
+          });
+          $(".pagination").append($footpage)
+         }
+
+       // function page(current){
+       //    var num_btn = document.querySelectorAll('.num');
+       //    for(i=0;i<num_btn.length;i++){
+       //      this.onclick = function(){
+       //        current = this.innerHTML
+       //      }
+       //    }
+       // }
+      
+      </script>   
+  </body>
+</html>
+
+
+<!-- https://www.ele.me/restapi/shopping/restaurants?extras%5B%5D=activities&geohash=wwmt70gy6fb&latitude=36.08431&limit=24&longitude=120.37148&offset=0&terminal=web
+
+
+https://www.ele.me/restapi/shopping/restaurants?extras%5B%5D=activities&geohash=wwmt70gy6fb&latitude=36.08431&limit=24&longitude=120.37148&offset=24&terminal=web -->
+
+<!-- for(var i=0;i<total;i+=4{
+    var li = $("<li>").html(`<a>${i/4+1}</a>`);
+    li.click(function(){
+      $(this).addClass("active").siblings().removeClass();
+      this.rerenderList($(this).index());
+  })
+  $(".pagination").append(li);
+} -->

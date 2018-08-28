@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title></title>
+    <link rel="stylesheet" href="/bootstrap/css/bootstrap.css">
+    <script type="text/javascript" src="/bootstrap/js/jquery-1.11.0.js"></script>
+    <script type="text/javascript" src="/bootstrap/js/bootstrap.js"></script>
+  </head>
+  <body>
+  	<%- include("myheader.ejs",{title:isnew?'发表博客':"更新博客",isShow:false,isSearch:false})%>
+   	<div class="container">
+   		<!-- <form action="<%= isnew?'/article':'/article/update/'+info._id%>" method="post"> -->
+   		<form action="<%= isnew?'/article':'/article/update'%>" method="post" enctype="multipart/form-data">
+ 
+   		  <div class="form-group">
+   		    <label for="exampleInputEmail1">标题</label>
+   		    <input type="text" class="form-control" id="exampleInputEmail1" name="title" placeholder="title" value="<%= isnew?'':info.title%>">
+   		  </div>
+   		  <div class="form-group">
+   		    <label for="exampleInputPassword1">内容 </label>
+   		   <textarea rows="4" class="form-control" name="content"><%= isnew?'':info.content%></textarea>
+   		  </div>
+
+        <div class="form-group">
+          <label for="exampleInputPassword1">照片 </label>
+          <input type="file" name="myphoto"/>
+        </div>
+   		  <!-- <div class="form-group">
+   		    <label for="exampleInputFile">File input</label>
+   		    <input type="file" id="exampleInputFile">
+   		    <p class="help-block">Example block-level help text here.</p>
+   		  </div>
+   		  <div class="checkbox">
+   		    <label>
+   		      <input type="checkbox"> Check me out
+   		    </label>
+   		  </div> -->
+        <input type="hidden" name="id"  value="<%= isnew?'':info._id%>"/>
+
+
+   		  <button type="submit" class="btn btn-default"><%= isnew?'submit':"update"%></button>
+
+   		  
+   		</form>
+   	</div>
+  </body>
+</html>
